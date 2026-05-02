@@ -1,0 +1,21 @@
+name: "my-website"
+navbar:
+  title: Julia Arwari
+  left:
+    - text: Home
+      href: index.html
+      icon: fa-home
+    - text: Connect
+      href: "https://www.linkedin.com/in/julia-arwari-790215255"
+      icon: fa-linkedin
+    - text: Projects
+      href: projects.html
+      icon: fa-computer
+    - text: CV
+      href: files/Julia_Arwari_Resume.pdf
+      icon: fa-paperclip
+output:
+  html_document:
+    theme: flatly
+    css: style.css
+output_dir: docs

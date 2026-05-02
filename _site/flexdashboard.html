@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="DATA 555" />
+
+
+<title>Introduction to flexdashboard</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Introduction to
+<code>flexdashboard</code></h1>
+<h4 class="author">DATA 555</h4>
+
+</div>
+
+
+<div id="why-dashboards" class="section level3">
+<h3>Why dashboards</h3>
+<ul>
+<li>Dashboards allow us to put together visual and tabular information
+into a single location</li>
+<li>Layouts can help tell stories to better glean insights from
+data</li>
+<li>Can be automated and made available in real time</li>
+<li>Because it is required for this class and to complete your data
+science certificate 🙃</li>
+</ul>
+</div>
+<div id="why-flexdashboard" class="section level3">
+<h3>Why <code>flexdashboard</code>?</h3>
+<ul>
+<li>Dead simple to use</li>
+<li>High level of customization with minimal effort</li>
+<li>Provides static html output so can be deployed without running a
+server (i.e., easier to get on the internet)</li>
+</ul>
+</div>
+<div id="package-installations" class="section level3">
+<h3>Package installations</h3>
+<ul>
+<li>To follow along with this demo, you will need to install the
+<code>flexdashboard</code> and <code>bslib</code> packages</li>
+</ul>
+</div>
+<div id="basics-of-flexdashboard" class="section level3">
+<h3>Basics of <code>flexdashboard</code></h3>
+<ul>
+<li>The <a
+href="https://pkgs.rstudio.com/flexdashboard/">documentation</a> is
+really fantastic and easy to read.</li>
+<li>Check out the <a
+href="https://pkgs.rstudio.com/flexdashboard/articles/using.html">Using
+<code>flexdashboard</code></a> vignette for getting started.</li>
+<li>We will also examine easy ways to modify the theme of <a
+href="https://pkgs.rstudio.com/flexdashboard/articles/theme.html"><code>flexdashboard</code></a>
+using the <a
+href="https://rstudio.github.io/bslib/"><code>bslib</code></a>
+package.</li>
+</ul>
+</div>
+<div id="getting-started" class="section level3">
+<h3>Getting started</h3>
+<ul>
+<li><code>flexdashboard</code> is just another output type for R
+Markdown</li>
+<li>Write a <code>.Rmd</code> file with
+<code>output_type: flexdashboard::flex_dashboard</code></li>
+<li>Add relevant text and R code chunks</li>
+<li>Click Knit (or automate a la DATA 550 🙃) to generate a static
+<code>.html</code> file.</li>
+<li>While the preview of the dashboard will open in a browser window in
+R Studio, this <code>.html</code> file can be opened using any web
+browser.</li>
+</ul>
+</div>
+<div id="try-it-yourself" class="section level3">
+<h3>Try it yourself!</h3>
+<ul>
+<li>Click File: New File: R Markdown: From template: flexdashboard</li>
+<li>Save the file as <code>test_dashboard.Rmd</code> (or whatever you
+like) in a location where you will be able to find it later.</li>
+<li>Click Knit and see the result in R Studio</li>
+<li>Now go find your <code>test_dashboard.html</code> file in your file
+finder and open it in your favorite web browser (e.g., Google Chrome,
+Safari, etc…)</li>
+</ul>
+</div>
+<div id="closer-look-at-the-syntax" class="section level3">
+<h3>Closer look at the syntax</h3>
+<ul>
+<li>Notice the options included in the <code>yaml</code> header.</li>
+<li><code>orientation: columns</code> means that the layout will be, you
+guessed it, oriented by columns</li>
+<li><code>orientation: rows</code> means that the layout will be
+oriented by rows</li>
+<li>Note that it is the “level 2 markdown headers” (i.e., the
+<code>-------------</code>) in the <code>.Rmd</code>, along with the
+word <code>Column</code> that you see in the <code>.Rmd</code> that
+defines column breaks</li>
+<li><code>{data-width=350}</code> is an option for controlling the
+behavior of the column/row <code>div</code> in the resulting
+<code>html</code>
+<ul>
+<li>If this doesn’t mean anything to you, that’s OK!</li>
+</ul></li>
+</ul>
+</div>
+<div id="try-it-yourself-1" class="section level3">
+<h3>Try it yourself!</h3>
+<ul>
+<li>Change the orientation from Columns to Rows</li>
+<li>Add new columns/rows and R code chunks to change the layout</li>
+</ul>
+</div>
+<div id="scroll-vs.-fill-view" class="section level3">
+<h3><code>scroll</code> vs. <code>fill</code> view</h3>
+<ul>
+<li>The option <code>vertical_layout: fill</code> in the
+<code>yaml</code> header specifies to vertically re-size charts so they
+completely fill the page</li>
+<li>The option <code>vertical_layout: scroll</code> lays out charts at
+their natural height, with users needed to scroll across/down a page as
+needed to see all of the figures</li>
+<li>This is relevant for ensuring that the dashboard is coherently
+viewable and user friendly regardless of what device is being used.</li>
+</ul>
+</div>
+<div id="try-it-out" class="section level3">
+<h3>Try it out!</h3>
+<ul>
+<li>To ensure that your dashboard looks good and resizes appropriately
+for smaller screens/mobile devices, we can use developer tools in a web
+browser.</li>
+<li>Knit and open your dashboard in a web browser</li>
+<li>Google Chrome instructions
+<ul>
+<li>Right click anywhere on the page and select
+<code>Inspect</code></li>
+<li>A box will open on the right side of your screen</li>
+<li>Click on the small icon with a computer and phone on the top left of
+this box.</li>
+<li>Set dimensions or select a device to see how your dashboard would
+look on a mobile device.</li>
+<li>Change scrolling options and see what, if any, impact it has</li>
+</ul></li>
+</ul>
+</div>
+<div id="tabsets" class="section level3">
+<h3>Tabsets</h3>
+<ul>
+<li>Scrolling is not always desirable behavior as users may easily get
+lost while scrolling through various outputs</li>
+<li>Adding tabs can be a good option to display information
+instead.</li>
+<li>This is done via the <code>{.tabset}</code> option next to
+<code>Column</code> or <code>Row</code></li>
+<li>You can also add <code>.tabset-fade</code> for a cool fading option
+when switching tabs. OoOoO Ahhhhh.</li>
+</ul>
+</div>
+<div id="figures" class="section level3">
+<h3>Figures</h3>
+<ul>
+<li>In this class, we are mostly focusing on <code>htmlwidgets</code>
+because you have seen base R plotting and <code>ggplot</code>ing
+elsewhere.</li>
+<li>It is also possible to include regular R graphics in code
+chunks.</li>
+<li>Generally these do not scale across device sizes as nicely as html
+widgets and experimentation will be required to get the sizing
+right.</li>
+</ul>
+</div>
+<div id="value-boxes" class="section level3">
+<h3>Value boxes</h3>
+<ul>
+<li>A nice way to include standout information in a dashboard is using a
+<code>valueBox</code></li>
+<li>These can be added like a new figure in an R code chunk.</li>
+</ul>
+</div>
+<div id="try-it-out-1" class="section level3">
+<h3>Try it out!</h3>
+<ul>
+<li>Add a row of <code>valueBoxes</code> to your document</li>
+<li>Modify the icons by browsing <a
+href="https://fontawesome.com/search?ic=free">free font awesome
+icons</a></li>
+<li>Modify the color via the <code>color</code> option (e.g.,
+<code>"warning"</code> or <code>"primary"</code>)</li>
+<li>See also the <a
+href="https://pkgs.rstudio.com/flexdashboard/articles/using.html#gauges"><code>gauges</code></a>
+documentation</li>
+</ul>
+</div>
+<div id="adding-multiple-pages" class="section level3">
+<h3>Adding multiple pages</h3>
+<ul>
+<li>To define a new page, use a “level 1 markdown header”
+(<code>===============</code>).</li>
+<li>Distinct orientations for individual pages can be controlled via the
+<code>{data-orientation}</code> option</li>
+<li>Each page you define will have its own top level tab on the
+navigation bar.</li>
+<li>You can add an icon to these links using the
+<code>{data-icon}</code> option.</li>
+<li>You can also organize pages into menus using
+<code>{data-navmenu}</code> and (optionally)
+<code>{data-navmenu-icon}</code>.</li>
+<li>Pages can also be hidden from the navigation bar using the
+<code>{.hidden}</code> option.</li>
+</ul>
+</div>
+<div id="story-boards" class="section level3">
+<h3>Story boards</h3>
+<ul>
+<li>Another option for laying out your dashboard is to use story board
+formatting</li>
+<li>Checkout the <a
+href="https://testing-apps.shinyapps.io/flexdashboard-storyboard/">example</a>
+and <a
+href="https://pkgs.rstudio.com/flexdashboard/articles/using.html#storyboards">associated
+documentation</a> to see how it works.</li>
+</ul>
+</div>
+<div id="theming-dashboards" class="section level3">
+<h3>Theming dashboards</h3>
+<ul>
+<li>Once you are satisfied with the layout of your dashboard, it is time
+to make it beautiful 😍</li>
+<li>Mercifully, there are extremely simple ways to do this that require
+knowing very little/nothing about
+<code>html</code>/<code>css</code>/<code>sass</code> anything.</li>
+<li><code>flexdashboard</code> builds on the <a
+href="https://getbootstrap.com/"><code>bootstrap</code></a>
+framework.</li>
+<li>Bootstrap is free to use, open source, and provides extremely
+flexible ways to style websites with really neat features with very
+minimal knowledge.</li>
+<li>We will utilize the <a
+href="https://rstudio.github.io/bslib/"><code>bslib</code></a> package,
+which provides a GUI interface for styling pages.</li>
+</ul>
+</div>
+<div id="theming-interactively" class="section level3">
+<h3>Theming interactively</h3>
+<ul>
+<li><code>bslib</code> provides an amazing real-time theming widget</li>
+<li>To use, add <code>runtime: shinyrmd</code> to the document’s
+<code>yaml</code> header</li>
+<li>Then include a code chunk with <code>context = "server"</code> as an
+option and contents <code>bslib::bs_themer()</code></li>
+<li>Save the document and click Run</li>
+<li>If the automatic themer doesn’t appear, close the preview and start
+again.</li>
+<li>Point and click to different options and see how the layout
+changes.</li>
+<li>Note that in the background, the contents that need to be added to
+the <code>yaml</code> header are printed out</li>
+</ul>
+</div>
+<div id="try-it-out-2" class="section level3">
+<h3>Try it out!</h3>
+<ul>
+<li>Add the relevant code chunks to turn on the automatic themer and run
+the app.</li>
+<li>Modify design elements until you find something that you like.</li>
+<li>Copy the yaml header to your dashboard, add
+<code>eval = FALSE</code> to the code chunk that includes
+<code>bslib::bs_themer()</code>.</li>
+<li>Save your document and knit. Now your document is styled!</li>
+<li>To see more styled elements that could be added to future
+dashboards, try running the <a
+href="https://gist.github.com/cpsievert/04bedbe9af652fab8c24a5e5eee0d721">example
+document</a>.
+<ul>
+<li>This includes several cool elements for <code>flexdashboard</code>
+that can be styled with bootstrap.</li>
+<li>You can use this for generating ideas for your own dashboard!</li>
+</ul></li>
+</ul>
+</div>
+<div id="theming-figures-in-non-htmlwidgets" class="section level3">
+<h3>Theming figures in non-htmlwidgets</h3>
+<ul>
+<li>Most html widgets should “just work” (i.e., color schemes/fonts/etc…
+will update automatically as you adjust the theme).</li>
+<li>However, <code>ggplot</code>’s will not.
+<ul>
+<li>Avoid a beautiful bootstrap layout that includes a hideous green +
+pink + gray background default <code>ggplot</code> figure!</li>
+</ul></li>
+<li>To avoid this, check out the <a
+href="https://rstudio.github.io/thematic/"><code>thematic</code></a> R
+package</li>
+<li>Add <code>thematic::thematic_rmd()</code> to a setup code chunk,
+which will automatically translate bootstrap themes to subsequent
+<code>R</code> plots</li>
+</ul>
+</div>
+<div id="additional-reading" class="section level3">
+<h3>Additional reading</h3>
+<ul>
+<li>You should spend time this week reading through the <a
+href="https://pkgs.rstudio.com/flexdashboard/articles/using.html">flexdashboard
+documentation</a> and trying out different layouts and options.</li>
+<li>If you want to learn more about what is going on under the hood with
+all of this, I recommend the following:
+<ul>
+<li><a href="https://www.w3schools.com/html/html_intro.asp">Intro to
+HTML</a></li>
+<li><a href="https://www.w3schools.com/html/html_css.asp">Intro to
+CSS</a></li>
+<li><a href="https://www.w3schools.com/whatis/whatis_bootstrap.asp">What
+is bootstrap?</a></li>
+</ul></li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
