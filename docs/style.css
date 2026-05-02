@@ -10,13 +10,13 @@
   color: white !important;
 }
 
-/* Hover state (slightly darker) */
+/* Hover state */
 .navbar .navbar-nav > li > a:hover {
   background-color: #6f8f3d !important;
   color: white !important;
 }
 
-/* Active tab (even darker for contrast) */
+/* Active tab */
 .navbar .navbar-nav > .active > a,
 .navbar .navbar-nav > .active > a:focus,
 .navbar .navbar-nav > .active > a:hover {
@@ -34,14 +34,7 @@ a:hover {
   text-decoration: underline;
 }
 
-.link-text {
-  color: #cb88b5 !important;
-  text-decoration: none;
-}
-
-a:hover .link-text {
-  color: #a13d63 !important;
-  text-decoration: underline;
+text-decoration: underline;
 }
 
 .columns {
