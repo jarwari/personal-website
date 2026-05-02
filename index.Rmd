@@ -8,9 +8,7 @@ title: ""
 knitr::include_graphics("images/Headshot.jpeg")
 ```
 
-### About Me:
-
-Hi! I am an MPH candidate in Environmental Health at Emory University, with a certificate in Data Science. My research focuses on environmental exposures and their impacts on population health, with experience spanning both epidemiologic analysis and applied public health work.
+Hi! I am an MPH candidate in Environmental Health at Emory University, with a certificate in Data Science. My research focuses on environmental exposures and their impacts on population health.
 
 My recent work includes examining associations between prenatal urinary biomarkers of glyphosate and aminomethylphosphonic acid and oxidative stress in the Illinois Kids Development Study. In addition, I have contributed to applied public health initiatives with The Carter Center’s Trachoma Control Program, supporting geospatial analysis and disease surveillance efforts.
 
