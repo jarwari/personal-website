@@ -34,14 +34,7 @@ a:hover {
   text-decoration: underline;
 }
 
-.link-text {
-  color: #cb88b5 !important;
-  text-decoration: none;
-}
-
-a:hover .link-text {
-  color: #a13d63 !important;
-  text-decoration: underline;
+text-decoration: underline;
 }
 
 .columns {
